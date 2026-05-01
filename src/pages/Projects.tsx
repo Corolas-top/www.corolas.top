@@ -296,7 +296,7 @@ export default function Projects() {
               fontWeight: 400,
             }}
           >
-            More Project Coming Soon
+            Your Project Here
           </h3>
           <p
             style={{
@@ -305,7 +305,7 @@ export default function Projects() {
               marginTop: '8px',
             }}
           >
-            We're always exploring new ideas and pushing the boundaries of what's possible. Stay tuned for more exciting projects in the pipeline.
+            This space is reserved for future Corolas projects. Template ready for expansion.
           </p>
         </div>
       </section>

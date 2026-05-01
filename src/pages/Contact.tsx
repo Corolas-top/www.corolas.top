@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Mail, MapPin } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { trpc } from '@/providers/trpc';
+import { supabase } from '@/lib/supabase';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,22 +12,33 @@ export default function Contact() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const sectionRef = useRef<HTMLElement>(null);
 
-  const contactMutation = trpc.contact.create.useMutation({
-    onSuccess: () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !subject || !message) return;
+
+    setIsSubmitting(true);
+    setError('');
+
+    const { error: supabaseError } = await supabase
+      .from('contact_submissions')
+      .insert([{ name, email, subject, message }]);
+
+    setIsSubmitting(false);
+
+    if (supabaseError) {
+      setError('Something went wrong. Please try again.');
+      console.error(supabaseError);
+    } else {
       setSubmitted(true);
       setName('');
       setEmail('');
       setSubject('');
       setMessage('');
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !email || !subject || !message) return;
-    contactMutation.mutate({ name, email, subject, message });
+    }
   };
 
   useEffect(() => {
@@ -257,7 +268,7 @@ export default function Contact() {
                 </div>
                 <button
                   type="submit"
-                  disabled={contactMutation.isPending}
+                  disabled={isSubmitting}
                   style={{
                     width: '100%',
                     height: '52px',
@@ -269,19 +280,19 @@ export default function Contact() {
                     textTransform: 'uppercase',
                     border: 'none',
                     borderRadius: '4px',
-                    cursor: contactMutation.isPending ? 'wait' : 'pointer',
+                    cursor: isSubmitting ? 'wait' : 'pointer',
                     transition: 'background-color 0.25s ease',
                     marginTop: '4px',
-                    opacity: contactMutation.isPending ? 0.7 : 1,
+                    opacity: isSubmitting ? 0.7 : 1,
                   }}
-                  onMouseEnter={(e) => { if (!contactMutation.isPending) e.currentTarget.style.backgroundColor = '#1a1a1a'; }}
+                  onMouseEnter={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = '#1a1a1a'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#0a0a0a'; }}
                 >
-                  {contactMutation.isPending ? 'Sending...' : 'Send Message'}
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
-                {contactMutation.isError && (
+                {error && (
                   <p style={{ fontSize: '13px', color: '#ef4444', marginTop: '4px' }}>
-                    Something went wrong. Please try again.
+                    {error}
                   </p>
                 )}
               </form>
@@ -304,7 +315,7 @@ export default function Contact() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '20px' }}>
               <Mail size={18} style={{ color: 'rgba(0,0,0,0.4)', flexShrink: 0 }} />
               <span style={{ fontSize: '15px', color: 'rgba(0,0,0,0.7)' }}>
-                corolar@corolas.top
+                hello@corolas.top
               </span>
             </div>
 

@@ -9,19 +9,19 @@ const teamMembers = [
     initials: 'RS',
     name: 'Rhea A. Shirley',
     role: 'Co-founder',
-    bio: 'Visionary leader and strategist, guiding Corolas with a commitment to excellence and innovation.',
+    bio: 'Visionary leader and strategist. Rhea guides Corolas with a commitment to excellence and innovation.',
   },
   {
     initials: 'CG',
     name: 'Charles Gao',
     role: 'Co-founder',
-    bio: 'Technical architect and builder, transforming ambitious ideas into robust, scalable systems.',
+    bio: 'Technical architect and builder. Charles transforms ambitious ideas into robust, scalable systems.',
   },
   {
     initials: 'LW',
     name: 'Lazlo Wavel',
     role: 'Principal Assistant',
-    bio: 'Operations and coordination, ensuring that every project runs smoothly and every detail is accounted for.',
+    bio: 'Operations and coordination. Lazlo ensures that every project runs smoothly and every detail is accounted for.',
   },
 ];
 
@@ -156,7 +156,7 @@ export default function About() {
               marginTop: '24px',
             }}
           >
-            To knowledge, within nature; to ideas, beyond limits.
+            Investigate things to gain knowledge; let imagination run wild.
           </p>
 
           <div
