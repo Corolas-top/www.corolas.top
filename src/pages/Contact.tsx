@@ -315,7 +315,7 @@ export default function Contact() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '20px' }}>
               <Mail size={18} style={{ color: 'rgba(0,0,0,0.4)', flexShrink: 0 }} />
               <span style={{ fontSize: '15px', color: 'rgba(0,0,0,0.7)' }}>
-                hello@corolas.top
+                corolar@corolas.top
               </span>
             </div>
 

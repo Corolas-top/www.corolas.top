@@ -156,7 +156,7 @@ export default function About() {
               marginTop: '24px',
             }}
           >
-            Investigate things to gain knowledge; let imagination run wild.
+            To knowledge, within nature; to ideas, beyond limits.
           </p>
 
           <div
