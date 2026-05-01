@@ -48,22 +48,6 @@ module.exports = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        corolas: {
-          bg: '#050508',
-          'bg-elevated': '#0A0A12',
-          'bg-subtle': '#12121C',
-          gold: '#D4AF37',
-          cyan: '#00D4AA',
-          rose: '#E8508A',
-          text: '#F0F0F5',
-          'text-secondary': '#8A8A9A',
-          'text-muted': '#5A5A6A',
-        },
-      },
-      fontFamily: {
-        display: ['Space Grotesk', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
-        chinese: ['Noto Serif SC', 'serif'],
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
