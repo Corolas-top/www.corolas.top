@@ -14,6 +14,7 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import AuthCallback from './pages/AuthCallback';
 import Account from './pages/Account';
+import OAuthConsent from './pages/OAuthConsent';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/oauth/consent" element={<OAuthConsent />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

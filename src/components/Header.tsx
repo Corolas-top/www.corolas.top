@@ -56,7 +56,7 @@ export default function Header() {
   }, []);
 
   const isDark = location.pathname === '/' ? overDark : true;
-  const isAuthPage = ['/login', '/register', '/reset-password'].includes(location.pathname);
+  const isAuthPage = ['/login', '/register', '/reset-password', '/oauth/consent'].includes(location.pathname);
 
   // Hide header on auth pages
   if (isAuthPage) return null;
