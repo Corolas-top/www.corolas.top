@@ -25,7 +25,7 @@ export default function Footer() {
             style={{ height: '56px', marginBottom: '16px' }}
           />
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.6 }}>
-            &copy; 2026 Corolas. All rights reserved.
+            &copy; 2024 Corolas. All rights reserved.
           </p>
         </div>
 

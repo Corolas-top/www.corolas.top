@@ -12,8 +12,8 @@ export const projectsData = [
     name: 'Platonic',
     domain: 'platonic.corolas.top',
     logo: '/images/platonic-logo.png',
-    description: 'An emotionally immersive AI companion engineered for deep romantic connection, crafting intimate, personalized experiences through affectionate dialogue and genuine emotional presence.',
-    shortDescription: 'An AI companion engineered for deep romantic connection.',
+    description: 'Pushing the frontiers of AI-powered creative tools. Platonic bridges human imagination with machine intelligence, enabling new forms of digital expression that were previously unimaginable.',
+    shortDescription: 'Exploring the boundaries of AI-driven creativity and digital expression.',
     link: 'https://platonic.corolas.top',
     status: 'LIVE' as const,
   },
@@ -22,8 +22,8 @@ export const projectsData = [
     name: 'Yhea',
     domain: 'yhea.corolas.top',
     logo: '/images/yhea-logo.png',
-    description: 'An adaptive platform with AI tutor redefining international education, delivering deeply personalized A-Level, AP, and IB mastery through intelligent, curriculum-aligned pedagogy.',
-    shortDescription: 'AI- and data-driven solutions for personalized international education.',
+    description: 'Yhea builds intelligent infrastructure for the decentralized web. From smart APIs to adaptive systems, we create the backbone that powers next-generation applications.',
+    shortDescription: 'Intelligent systems for the modern web.',
     link: 'https://yhea.corolas.top',
     status: 'LIVE' as const,
   },
@@ -32,8 +32,8 @@ export const projectsData = [
     name: 'Thea',
     domain: 'thea.corolas.top',
     logo: '/images/thea-logo.png',
-    description: 'An intelligence platform at the convergence of AI and biotechnology, transforming complex scientific landscapes into strategic, actionable foresight for researchers and innovators',
-    shortDescription: 'AI- and data-driven insights for AI x biotech innovation.',
+    description: 'Thea is our analytics and insights engine, transforming raw data into actionable intelligence. Built for scale, designed for clarity.',
+    shortDescription: 'Advanced analytics and insights platform.',
     link: 'https://thea.corolas.top',
     status: 'LIVE' as const,
   },
@@ -296,7 +296,7 @@ export default function Projects() {
               fontWeight: 400,
             }}
           >
-            More Project Coming Soon
+            Your Project Here
           </h3>
           <p
             style={{
@@ -305,7 +305,7 @@ export default function Projects() {
               marginTop: '8px',
             }}
           >
-            We're always exploring new ideas and pushing the boundaries of what's possible. Stay tuned for more exciting projects in the pipeline.
+            This space is reserved for future Corolas projects. Template ready for expansion.
           </p>
         </div>
       </section>

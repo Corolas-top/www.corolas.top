@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router';
+import { AuthProvider } from '@/contexts/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -9,11 +10,15 @@ import Contact from './pages/Contact';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Login from './pages/Login';
+import Register from './pages/Register';
+import ResetPassword from './pages/ResetPassword';
+import AuthCallback from './pages/AuthCallback';
+import Account from './pages/Account';
 import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -24,10 +29,14 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/account" element={<Account />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
-    </>
+    </AuthProvider>
   );
 }
 
