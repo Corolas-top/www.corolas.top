@@ -1,13 +1,13 @@
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
-import { TRPCProvider } from '@/providers/trpc'
+import { AuthProvider } from '@/contexts/AuthContext'
 import './index.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
-    <TRPCProvider>
+    <AuthProvider>
       <App />
-    </TRPCProvider>
-  </BrowserRouter>
+    </AuthProvider>
+  </BrowserRouter>,
 )

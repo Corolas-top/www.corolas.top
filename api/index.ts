@@ -1,10 +1,13 @@
-import { getRequestListener } from '@hono/node-server'
-import app from './boot'
+import { Hono } from "hono";
 
 /**
- * Vercel Serverless Function entry point.
- * 
- * getRequestListener converts Hono's Web-standard fetch handler
- * into Node.js's (req, res) callback format that Vercel expects.
+ * Minimal Vercel Serverless Function entry point.
+ * All auth is handled client-side via Supabase.
+ * This keeps the API layer alive for future expansion.
  */
-export default getRequestListener(app.fetch)
+const app = new Hono();
+
+app.get("/api/ping", (c) => c.json({ ok: true, ts: Date.now() }));
+app.all("/api/*", (c) => c.json({ ok: true }));
+
+export default app.fetch;
