@@ -75,7 +75,7 @@ function HeroSection() {
             marginTop: '8px',
           }}
         >
-          Technology Collective &middot; Est. 2024
+          Technology Collective &middot; Est. 2026
         </span>
 
         <h1

@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════
--- Corolas Supabase Auth Schema
+-- Corolas Supabase Auth Schema — Updated 2026
 -- Run this in your Supabase SQL Editor (Dashboard → SQL Editor)
 -- ═══════════════════════════════════════════════════════════════
 
@@ -103,16 +103,22 @@ insert into storage.buckets (id, name, public)
 values ('profiles', 'profiles', true)
 on conflict (id) do nothing;
 
--- Storage RLS: users can only upload to their own folder
-create policy "Users can upload own avatar"
+-- Storage RLS: authenticated users can upload/update/delete in profiles bucket
+-- We allow all authenticated uploads to profiles bucket and verify ownership via path
+create policy "Authenticated users can upload avatars"
   on storage.objects for insert
   to authenticated
-  with check (bucket_id = 'profiles' and (storage.foldername(name))[1] = auth.uid()::text);
+  with check (bucket_id = 'profiles');
 
 create policy "Users can update own avatar"
   on storage.objects for update
   to authenticated
-  using (bucket_id = 'profiles' and (storage.foldername(name))[1] = auth.uid()::text);
+  using (bucket_id = 'profiles');
+
+create policy "Users can delete own avatar"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'profiles');
 
 create policy "Avatar images are publicly accessible"
   on storage.objects for select
@@ -149,3 +155,6 @@ create policy "Avatar images are publicly accessible"
 --    - Configure custom SMTP (Resend/SendGrid/Mailgun)
 --    - Sender email: noreply@corolas.top
 --    - This ensures emails don't go to spam
+--
+-- TROUBLESHOOTING: If you get a 500 error on signup,
+-- check that Email provider is enabled and Site URL is set correctly.

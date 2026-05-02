@@ -38,7 +38,15 @@ export default function Register() {
     setIsSubmitting(false);
 
     if (authError) {
-      setError(authError.message);
+      // Show Supabase error message; if it's a 500, suggest OAuth as fallback
+      const msg = authError.message || 'An unexpected error occurred';
+      if (msg.includes('500') || msg.includes('Internal Server Error') || msg.includes('internal')) {
+        setError(
+          'Email signup is temporarily unavailable. Please try signing up with Google, Discord, or GitHub instead.'
+        );
+      } else {
+        setError(msg);
+      }
     } else if (needsEmailConfirmation) {
       setNeedsConfirmation(true);
     }

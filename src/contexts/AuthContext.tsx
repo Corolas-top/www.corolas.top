@@ -49,23 +49,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   /* ── Fetch profile ── */
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('id, username, avatar_url, updated_at')
-      .eq('id', userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url, updated_at')
+        .eq('id', userId)
+        .single();
 
-    if (!error && data) {
-      setProfile(data as Profile);
-    } else {
-      // Fallback: build profile from user metadata
-      setProfile({
-        id: userId,
-        username: null,
-        avatar_url: null,
-        updated_at: null,
-      });
+      if (!error && data) {
+        setProfile(data as Profile);
+        return;
+      }
+    } catch {
+      // Network or other error — silently fall back
     }
+    // Fallback: build profile from user metadata
+    setProfile({
+      id: userId,
+      username: null,
+      avatar_url: null,
+      updated_at: null,
+    });
   }, []);
 
   /* ── Initialize session ── */
@@ -74,12 +78,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initializedRef.current = true;
 
     const initSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser(session.user);
-        await fetchProfile(session.user.id);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          setUser(session.user);
+          await fetchProfile(session.user.id);
+        }
+      } catch (err) {
+        console.error('Auth initialization error:', err);
+      } finally {
+        // ALWAYS set isLoading to false, even on error
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initSession();
@@ -91,7 +101,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       async (_event, session) => {
         if (session?.user) {
           setUser(session.user);
-          await fetchProfile(session.user.id);
+          try {
+            await fetchProfile(session.user.id);
+          } catch {
+            // Ignore profile fetch errors
+          }
         } else {
           setUser(null);
           setProfile(null);
@@ -144,15 +158,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = async (updates: Partial<Pick<Profile, 'username' | 'avatar_url'>>) => {
     if (!user) return { error: new Error('Not authenticated') };
-    const { error } = await supabase
-      .from('profiles')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', user.id);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', user.id);
 
-    if (!error) {
-      setProfile((prev) => prev ? { ...prev, ...updates } : null);
+      if (!error) {
+        setProfile((prev) => prev ? { ...prev, ...updates } : null);
+      }
+      return { error };
+    } catch (err) {
+      return { error: err instanceof Error ? err : new Error('Update failed') };
     }
-    return { error };
   };
 
   const updatePassword = async (newPassword: string) => {

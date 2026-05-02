@@ -21,23 +21,23 @@ export default function Account() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateMsg, setUpdateMsg] = useState('');
 
-  // Password change
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
-  // Avatar upload
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Redirect if not logged in
   useEffect(() => {
     if (!isLoading && !user) {
       navigate('/login');
     }
   }, [user, isLoading, navigate]);
 
+  // Scroll animations
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
@@ -49,6 +49,7 @@ export default function Account() {
     return () => ctx.revert();
   }, []);
 
+  // Sync edit name with profile
   useEffect(() => {
     if (profile?.username) setEditName(profile.username);
   }, [profile?.username]);
@@ -56,7 +57,10 @@ export default function Account() {
   if (isLoading) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#070708', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: '40px', height: '40px', border: '2px solid rgba(255,255,255,0.1)', borderTop: '2px solid #c8a45c', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <div style={{
+          width: '40px', height: '40px', border: '2px solid rgba(255,255,255,0.1)', borderTop: '2px solid #c8a45c', borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+        }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
@@ -119,36 +123,43 @@ export default function Account() {
     // Validate
     if (!file.type.startsWith('image/')) {
       setUpdateMsg('Please upload an image file');
+      setTimeout(() => setUpdateMsg(''), 4000);
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
       setUpdateMsg('Image must be under 2MB');
+      setTimeout(() => setUpdateMsg(''), 4000);
       return;
     }
 
     setIsUploadingAvatar(true);
     setUpdateMsg('');
 
-    const fileExt = file.name.split('.').pop();
-    const filePath = `avatars/${user.id}.${fileExt}`;
+    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'png';
+    // Use user ID as the folder name to match RLS policy: (storage.foldername(name))[1] = auth.uid()::text
+    const filePath = `${user.id}/avatar.${fileExt}`;
 
+    // Upload to Supabase Storage
     const { error: uploadError } = await supabase.storage
       .from('profiles')
-      .upload(filePath, file, { upsert: true });
+      .upload(filePath, file, { upsert: true, contentType: file.type });
 
     if (uploadError) {
-      setUpdateMsg('Failed to upload avatar');
+      setUpdateMsg(`Upload failed: ${uploadError.message}`);
       setIsUploadingAvatar(false);
+      setTimeout(() => setUpdateMsg(''), 5000);
       return;
     }
 
     const { data: { publicUrl } } = supabase.storage.from('profiles').getPublicUrl(filePath);
 
+    // Update profile with new avatar URL
     const { error: updateError } = await updateProfile({ avatar_url: publicUrl });
     setIsUploadingAvatar(false);
 
     if (updateError) {
-      setUpdateMsg('Failed to update avatar');
+      setUpdateMsg(`Update failed: ${(updateError as Error).message || 'Unknown error'}`);
+      setTimeout(() => setUpdateMsg(''), 5000);
     } else {
       setUpdateMsg('Avatar updated successfully');
       setTimeout(() => setUpdateMsg(''), 3000);
@@ -202,12 +213,19 @@ export default function Account() {
               style={{
                 position: 'absolute', bottom: '-2px', right: '-2px',
                 width: '28px', height: '28px', borderRadius: '50%',
-                backgroundColor: '#c8a45c', border: '2px solid #070708',
+                backgroundColor: isUploadingAvatar ? 'rgba(200,164,92,0.5)' : '#c8a45c',
+                border: '2px solid #070708',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', transition: 'opacity 0.2s ease',
+                cursor: isUploadingAvatar ? 'wait' : 'pointer',
+                transition: 'opacity 0.2s ease',
               }}
             >
-              <Camera size={13} color="#070708" />
+              {isUploadingAvatar ? (
+                <div style={{ width: '12px', height: '12px', border: '1.5px solid #070708', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+              ) : (
+                <Camera size={13} color="#070708" />
+              )}
+              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
             </button>
             <input
               ref={fileInputRef}
