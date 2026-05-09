@@ -121,7 +121,7 @@ export default function Footer() {
         }}
       >
         <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>
-          Anchor Reality for Corolas.
+          Crafted with curiosity.
         </p>
       </div>
     </footer>

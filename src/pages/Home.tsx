@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ParticleCanvas from '@/components/ParticleCanvas';
+import { fetchProjects } from '@/lib/projects';
+import type { Project } from '@/types/project';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -305,43 +307,17 @@ function PhilosophySection() {
   );
 }
 
-const projectsPreview = [
-  {
-    name: 'Platonic',
-    domain: 'platonic.corolas.top',
-    description: 'Exploring the boundaries of AI-driven creativity and digital expression.',
-    logo: '/images/platonic-logo.png',
-    link: 'https://platonic.corolas.top',
-  },
-  {
-    name: 'Yhea',
-    domain: 'yhea.corolas.top',
-    description: 'Intelligent systems for the modern web.',
-    logo: '/images/yhea-logo.png',
-    link: 'https://yhea.corolas.top',
-  },
-  {
-    name: 'Thea',
-    domain: 'thea.corolas.top',
-    description: 'Advanced analytics and insights platform.',
-    logo: '/images/thea-logo.png',
-    link: 'https://thea.corolas.top',
-  },
-  {
-    name: 'Edith',
-    domain: 'edith.corolas.top',
-    description: 'Next-generation development tools and frameworks.',
-    logo: '/images/edith-logo.png',
-    link: 'https://edith.corolas.top',
-  },
-];
-
 function ProjectsPreviewSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    fetchProjects().then(setProjects);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    if (!section || projects.length === 0) return;
 
     const ctx = gsap.context(() => {
       const cards = section.querySelectorAll('.project-card');
@@ -356,7 +332,7 @@ function ProjectsPreviewSection() {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [projects]);
 
   return (
     <section
@@ -400,9 +376,9 @@ function ProjectsPreviewSection() {
             gap: '24px',
           }}
         >
-          {projectsPreview.map((project) => (
+          {projects.map((project) => (
             <div
-              key={project.name}
+              key={project.slug}
               className="project-card"
               style={{
                 backgroundColor: '#0e0e10',
@@ -432,11 +408,15 @@ function ProjectsPreviewSection() {
                   justifyContent: 'center',
                 }}
               >
-                <img
-                  src={project.logo}
-                  alt={project.name}
-                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                />
+                {project.logo_url ? (
+                  <img
+                    src={project.logo_url}
+                    alt={project.name}
+                    style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                  />
+                ) : (
+                  <span style={{ fontSize: '32px', fontWeight: 300, color: 'rgba(255,255,255,0.2)' }}>{project.name.charAt(0)}</span>
+                )}
               </div>
               <h3
                 style={{
@@ -471,10 +451,10 @@ function ProjectsPreviewSection() {
                   overflow: 'hidden',
                 }}
               >
-                {project.description}
+                {project.short_description}
               </p>
               <a
-                href={project.link}
+                href={`https://${project.domain}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
