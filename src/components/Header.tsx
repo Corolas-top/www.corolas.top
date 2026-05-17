@@ -6,7 +6,6 @@ import { Menu, X, User, Settings, LogOut, ChevronDown } from 'lucide-react';
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Projects', path: '/projects' },
-  { label: 'Pricing', path: '/payment' },
   { label: 'About', path: '/about' },
   { label: 'Contact', path: '/contact' },
 ];

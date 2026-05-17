@@ -148,7 +148,25 @@ function HeroSection() {
             Explore Our Work
           </Link>
           <Link
-            to="/payment"
+            to="/about"
+            style={{
+              fontSize: '13px',
+              fontWeight: 500,
+              letterSpacing: '0.14em',
+              color: '#ffffff',
+              backgroundColor: 'transparent',
+              border: 'none',
+              padding: '16px 8px',
+              textDecoration: 'none',
+              textTransform: 'uppercase',
+              textDecorationLine: 'underline',
+              textUnderlineOffset: '6px',
+            }}
+          >
+            Meet the Team &rarr;
+          </Link>
+          <Link
+            to="/login"
             style={{
               fontSize: '13px',
               fontWeight: 500,
@@ -171,25 +189,7 @@ function HeroSection() {
               e.currentTarget.style.color = '#c8a45c';
             }}
           >
-            Pricing
-          </Link>
-          <Link
-            to="/about"
-            style={{
-              fontSize: '13px',
-              fontWeight: 500,
-              letterSpacing: '0.14em',
-              color: '#ffffff',
-              backgroundColor: 'transparent',
-              border: 'none',
-              padding: '16px 8px',
-              textDecoration: 'none',
-              textTransform: 'uppercase',
-              textDecorationLine: 'underline',
-              textUnderlineOffset: '6px',
-            }}
-          >
-            Meet the Team &rarr;
+            Sign In
           </Link>
         </div>
       </div>

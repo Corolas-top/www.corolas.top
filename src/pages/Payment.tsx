@@ -3,33 +3,24 @@ import { useSearchParams, useNavigate } from "react-router";
 import {
   ArrowLeft,
   Shield,
-  CreditCard,
   Smartphone,
   QrCode,
   AlertCircle,
-  Check,
   Loader2,
   Globe,
-  ExternalLink,
-  Zap,
-  Crown,
-  Rocket,
+  Brain,
   GraduationCap,
   Gamepad2,
-  Brain,
-  Coins,
-  Megaphone,
-  Search,
-  Users,
   Sparkles,
-  Box,
+  Crown,
+  Search,
+  CreditCard,
 } from "lucide-react";
 
 // ─── ZPAY config ───
 const ZPAY_PID = "2026051723232068";
 const ZPAY_SUBMIT_URL = "https://zpayz.cn/submit.php";
 
-// ─── Helpers ───
 function generateOrderId(): string {
   const now = new Date();
   const y = now.getFullYear();
@@ -49,141 +40,43 @@ function getSiteMeta(site?: string | null) {
     corater: { name: "Agent Studio", color: "#10b981", icon: <Brain size={18} />, domain: "corater.corolas.top" },
     ordo: { name: "Ordo Network", color: "#ef4444", icon: <Search size={18} />, domain: "ordo.corolas.top" },
     ic: { name: "Platonic", color: "#ec4899", icon: <Sparkles size={18} />, domain: "platonic.corolas.top" },
-    edu: { name: "Corolas Academy", color: "#3b82f6", icon: <GraduationCap size={18} />, domain: "edu.corolas.top" },
+    edu: { name: "Edurola", color: "#3b82f6", icon: <GraduationCap size={18} />, domain: "edurola.corolas.top" },
     earth: { name: "Earth Online", color: "#22c55e", icon: <Gamepad2 size={18} />, domain: "earth-online.corolas.top" },
+    aiwiki: { name: "AIwiki", color: "#8b5cf6", icon: <Brain size={18} />, domain: "aiwiki.corolas.top" },
   };
   return site && sites[site] ? sites[site] : null;
 }
 
-// ─── No-params gateway home ───
-function GatewayHome() {
-  const navigate = useNavigate();
-
-  const products = [
-    {
-      site: "corater",
-      title: "Agent Studio Pro",
-      desc: "Unlimited agents, custom models, API access",
-      price: "¥99",
-      period: "/month",
-      icon: <Brain size={24} />,
-      color: "#10b981",
-    },
-    {
-      site: "edu",
-      title: "Academy Premium",
-      desc: "All courses, 1-on-1 tutoring, certification",
-      price: "¥199",
-      period: "/month",
-      icon: <GraduationCap size={24} />,
-      color: "#3b82f6",
-    },
-    {
-      site: "earth",
-      title: "Earth Online VIP",
-      desc: "Premium items, exclusive zones, no ads",
-      price: "¥30",
-      period: "/month",
-      icon: <Gamepad2 size={24} />,
-      color: "#22c55e",
-    },
-    {
-      site: "ic",
-      title: "Platonic Soulmate",
-      desc: "Advanced companions, voice chat, memory",
-      price: "¥49",
-      period: "/month",
-      icon: <Sparkles size={24} />,
-      color: "#ec4899",
-    },
-    {
-      site: "ww",
-      title: "Corolas Pro",
-      desc: "Priority support, 50GB storage, integrations",
-      price: "¥99",
-      period: "/month",
-      icon: <Crown size={24} />,
-      color: "#c8a45c",
-    },
-    {
-      site: "ordo",
-      title: "Ordo Investigator",
-      desc: "Advanced search, data export, team tools",
-      price: "¥59",
-      period: "/month",
-      icon: <Search size={24} />,
-      color: "#ef4444",
-    },
-  ];
-
-  const handleSelect = (p: (typeof products)[0]) => {
-    const params = new URLSearchParams({
-      name: p.title,
-      money: p.price.replace("¥", ""),
-      site: p.site,
-      type: "alipay",
-      return_url: `https://${getSiteMeta(p.site)?.domain || "corolas.top"}`,
-    });
-    navigate(`/payment?${params.toString()}`);
-  };
-
+// ─── Empty state — no payment params ───
+function NoParamsState() {
   return (
-    <div className="mx-auto max-w-5xl">
-      <div className="text-center mb-16">
-        <span className="text-xs uppercase tracking-[0.2em] text-[#c8a45c] mb-4 block">
-          Payment Gateway
-        </span>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4">
-          Corolas{" "}
-          <span className="text-gradient-gold">Pay</span>
-        </h1>
-        <p className="text-white/50 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
-          Unified checkout for all Corolas services. Secure, fast, and simple.
-        </p>
+    <div className="mx-auto max-w-md text-center">
+      <div className="w-20 h-20 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mx-auto mb-8">
+        <CreditCard size={32} className="text-[#c8a45c]/40" />
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {products.map((p) => (
-          <button
-            key={p.site + p.title}
-            onClick={() => handleSelect(p)}
-            className="text-left p-6 rounded-2xl bg-[#0e0e10] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 group"
-          >
-            <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-              style={{ backgroundColor: `${p.color}15`, color: p.color }}
-            >
-              {p.icon}
-            </div>
-            <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
-            <p className="text-sm text-white/40 mb-4">{p.desc}</p>
-            <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-light">{p.price}</span>
-              <span className="text-sm text-white/40">{p.period}</span>
-            </div>
-            <div className="mt-4 flex items-center gap-1 text-sm" style={{ color: p.color }}>
-              <span>Subscribe</span>
-              <ExternalLink size={14} />
-            </div>
-          </button>
-        ))}
+      <h2 className="text-2xl font-light text-white mb-3">
+        Corolas <span className="text-gradient-gold">Pay</span>
+      </h2>
+      <p className="text-sm text-white/40 leading-relaxed mb-6">
+        Unified payment gateway for all Corolas services.
+        <br />
+        Please initiate payment from the service you wish to subscribe to.
+      </p>
+      <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-left">
+        <p className="text-xs text-white/30 uppercase tracking-wider mb-2">How it works</p>
+        <ol className="text-sm text-white/50 space-y-2 list-decimal list-inside">
+          <li>Select a plan on any Corolas service</li>
+          <li>You will be redirected here to complete payment</li>
+          <li>After payment, return to the service automatically</li>
+        </ol>
       </div>
-
-      <div className="mt-16 text-center">
-        <p className="text-xs text-white/30 uppercase tracking-widest mb-4">
-          Trusted Payment Processor
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0e0e10] border border-white/[0.06]">
-            <QrCode size={16} className="text-[#1677ff]" />
-            <span className="text-sm text-white/50">Alipay</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0e0e10] border border-white/[0.06]">
-            <Smartphone size={16} className="text-[#07c160]" />
-            <span className="text-sm text-white/50">WeChat Pay</span>
-          </div>
-        </div>
-      </div>
+      <a
+        href="https://corolas.top"
+        className="inline-flex items-center gap-2 mt-8 text-sm text-[#c8a45c] hover:text-[#d4b76a] transition-colors"
+      >
+        <ArrowLeft size={16} />
+        Back to Corolas
+      </a>
     </div>
   );
 }
@@ -213,7 +106,6 @@ function CheckoutForm({
   const siteMeta = getSiteMeta(site);
   const outTradeNo = useRef(generateOrderId());
 
-  // Auto-submit after confirmation
   useEffect(() => {
     if (confirmed && formRef.current) {
       formRef.current.submit();
@@ -245,7 +137,6 @@ function CheckoutForm({
         throw new Error(data.msg || "Failed to generate payment signature");
       }
 
-      // Fill hidden form and submit
       const form = formRef.current;
       if (!form) return;
 
@@ -273,9 +164,19 @@ function CheckoutForm({
 
   return (
     <div className="mx-auto max-w-lg w-full">
+      {/* Corolas Pay Header */}
+      <div className="text-center mb-8">
+        <img src="/images/corolas-logo-white.png" alt="Corolas" className="w-14 h-14 mx-auto mb-4" />
+        <h1 className="text-2xl font-light">
+          <span className="text-white">Corolas</span>{" "}
+          <span className="text-gradient-gold">Pay</span>
+        </h1>
+        <p className="text-xs text-white/30 mt-1">Secure Payment Gateway</p>
+      </div>
+
       {/* Site badge */}
       {siteMeta && (
-        <div className="flex items-center justify-center gap-2 mb-8">
+        <div className="flex items-center justify-center gap-2 mb-6">
           <div
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
             style={{
@@ -300,7 +201,7 @@ function CheckoutForm({
           <div className="text-right">
             <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Amount</p>
             <p className="text-2xl font-light text-[#c8a45c]">
-              ¥{isValidMoney ? moneyNum.toFixed(2) : money}
+              &yen;{isValidMoney ? moneyNum.toFixed(2) : money}
             </p>
           </div>
         </div>
@@ -385,14 +286,14 @@ function CheckoutForm({
         ) : (
           <>
             <Shield size={18} />
-            Pay ¥{isValidMoney ? moneyNum.toFixed(2) : money}
+            Pay &yen;{isValidMoney ? moneyNum.toFixed(2) : money}
           </>
         )}
       </button>
 
       <p className="text-center text-xs text-white/30 mt-4 flex items-center justify-center gap-1">
         <Shield size={12} />
-        Secured by ZPAY · SSL Encrypted
+        Secured by ZPAY &middot; SSL Encrypted
       </p>
 
       {/* Hidden form for ZPAY submission */}
@@ -438,7 +339,7 @@ export default function Payment() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => hasOrder ? navigate(returnUrl) : navigate('/')}
               className="flex items-center gap-2 text-white/50 hover:text-white transition-colors"
             >
               <ArrowLeft size={18} />
@@ -463,7 +364,7 @@ export default function Payment() {
             param={param}
           />
         ) : (
-          <GatewayHome />
+          <NoParamsState />
         )}
       </main>
     </div>
