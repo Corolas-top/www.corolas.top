@@ -3,7 +3,6 @@ import { useSearchParams, useNavigate } from "react-router";
 import {
   ArrowLeft,
   Shield,
-  Smartphone,
   QrCode,
   AlertCircle,
   Loader2,
@@ -97,7 +96,6 @@ function CheckoutForm({
   returnUrl: string;
   param: string | null;
 }) {
-  const [payType, setPayType] = useState<string>(type === "wxpay" ? "wxpay" : "alipay");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -123,7 +121,7 @@ function CheckoutForm({
         body: JSON.stringify({
           name,
           money,
-          type: payType,
+          type: "alipay",
           out_trade_no: outTradeNo.current,
           notify_url: `https://corolas.top/api/payment/notify`,
           return_url: returnUrl,
@@ -224,38 +222,12 @@ function CheckoutForm({
           )}
         </div>
 
-        {/* Payment method selector */}
+        {/* Payment method — Alipay only */}
         <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Payment Method</p>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => setPayType("alipay")}
-            className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
-              payType === "alipay"
-                ? "border-[#1677ff]/50 bg-[#1677ff]/10"
-                : "border-white/[0.06] bg-transparent hover:border-white/[0.12]"
-            }`}
-          >
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${payType === "alipay" ? "border-[#1677ff]" : "border-white/20"}`}>
-              {payType === "alipay" && <div className="w-2.5 h-2.5 rounded-full bg-[#1677ff]" />}
-            </div>
-            <QrCode size={20} className={payType === "alipay" ? "text-[#1677ff]" : "text-white/40"} />
-            <span className={`text-sm ${payType === "alipay" ? "text-white" : "text-white/50"}`}>Alipay</span>
-          </button>
-
-          <button
-            onClick={() => setPayType("wxpay")}
-            className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
-              payType === "wxpay"
-                ? "border-[#07c160]/50 bg-[#07c160]/10"
-                : "border-white/[0.06] bg-transparent hover:border-white/[0.12]"
-            }`}
-          >
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${payType === "wxpay" ? "border-[#07c160]" : "border-white/20"}`}>
-              {payType === "wxpay" && <div className="w-2.5 h-2.5 rounded-full bg-[#07c160]" />}
-            </div>
-            <Smartphone size={20} className={payType === "wxpay" ? "text-[#07c160]" : "text-white/40"} />
-            <span className={`text-sm ${payType === "wxpay" ? "text-white" : "text-white/50"}`}>WeChat Pay</span>
-          </button>
+        <div className="flex items-center gap-3 p-4 rounded-xl border border-[#1677ff]/50 bg-[#1677ff]/10">
+          <QrCode size={20} className="text-[#1677ff]" />
+          <span className="text-sm text-white">Alipay</span>
+          <span className="text-[10px] text-white/30 ml-auto">扫描二维码支付</span>
         </div>
       </div>
 
